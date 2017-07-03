@@ -1,0 +1,160 @@
+---
+- hosts: all
+  gather_facts: true
+  become: true
+  vars:
+     oracle_base: /u01/app/oracle
+     oracle_inventory_loc: /u01/app/oraInventory
+     oracle_responsefile:
+
+     oracle_home: "{{ oracle_base }}/product/{{ oracle_db.version }}/db"
+     oracle_db:
+           name: orcl
+           passwd: Oracle123
+           version: 12.1.0.2
+           cdb: True
+           total_mb: 1024
+           characterset: AL32UTF8
+           ncharacterset: AL16UTF16
+           datafile_dest: /u01/oradata
+           recoveryfile_dest: /u01/fra
+           listener_name: LISTENER
+           listener_protocols: TCP
+           listener_port: 1521
+
+     oracle_env:
+            ORACLE_HOME: "{{ oracle_home }}"
+            LD_LIBRARY_PATH: "{{ oracle_home }}/lib"
+
+     oracle_stage_directory: /u01/stage
+     oracle_binaries:
+            - {name: linuxamd64_12102_database_1of2.zip, path: /media/swrepo/ }
+            - {name: linuxamd64_12102_database_2of2.zip, path: /media/swrepo/ }
+
+     oracle_groups:
+          - dba
+          - oinstall
+     oracle_user:
+           name: oracle
+           primgroup: oinstall
+           dbagroup: dba
+           othergroups: dba
+           passwd: "$6$0xHoAXXF$K75HKb64Hcb/CEcr3YEj2LGERi/U2moJgsCK.ztGxLsKoaXc4UBiNZPL0hlxB5ng6GL.gyipfQOOXplzcdgvD0"
+     #
+    #  oracle_dba_group: dba
+    #  oracle_prim_group: oinstall
+
+    #  oracle_user:         # Passwd :Oracle123
+    #      - { username: oracle, primgroup: oinstall, othergroups: dba, passwd: "$6$0xHoAXXF$K75HKb64Hcb/CEcr3YEj2LGERi/U2moJgsCK.ztGxLsKoaXc4UBiNZPL0hlxB5ng6GL.gyipfQOOXplzcdgvD0" }
+
+     os_packages:
+         - libselinux-python
+         - procps
+         - module-init-tools
+         - ethtool
+         - bc
+         - bind-utils
+         - nfs-utils
+         - xorg-x11-utils
+         - xorg-x11-xauth
+         - binutils
+         - compat-libstdc++-33
+         - gcc
+         - gcc-c++
+         - glibc
+         - glibc-devel
+         - glibc-devel.i686
+         - libaio
+         - libaio-devel
+         - libgcc
+         - libstdc++
+         - libstdc++-devel
+         - make
+         - sysstat
+         - openssh-clients
+         - compat-libcap1
+         - xorg-x11-xauth
+         - xorg-x11-xinit
+         - libXtst
+         - xdpyinfo
+         - xterm
+         - xsetroot
+         - libXp
+         - libXt
+         - libXtst
+         - ntp
+         - ksh
+         - lvm2
+         - xfsprogs
+         - btrfs-progs
+         - parted
+         - nc
+
+     oracle_sysctl:
+           - { name: kernel.shmall, value: 4294967296 }
+           - { name: kernel.shmmax, value: 68719476736 }
+           - { name: kernel.shmmni, value: 4096 }
+           - { name: kernel.sem, value: "250 32000 100 128" }
+           - { name: fs.file-max, value: 6815744 }
+           - { name: fs.aio-max-nr, value: 1048576 }
+           - { name: net.ipv4.ip_local_port_range, value: "9000 65500" }
+           - { name: net.core.rmem_default, value: 262144 }
+           - { name: net.core.rmem_max, value: 4194304 }
+           - { name: net.core.wmem_default, value: 262144 }
+           - { name: net.core.wmem_max, value: 1048576 }
+
+
+     oracle_seclimits:
+           - { name: 'soft nproc', value: 2047 }
+           - { name: 'hard nproc', value: 16384 }
+           - { name: 'soft nofile', value: 4096 }
+           - { name: 'hard nofile', value: 65536 }
+           - { name: 'soft memlock', value: "{{ ((0.9 * ansible_memtotal_mb)*1024)|round|int }}" }
+           - { name: 'hard memlock', value: "{{ ((0.9 * ansible_memtotal_mb)*1024)|round|int }}" }
+
+  tasks:
+
+############ Host preparation ###################
+
+    # - name: Check for correct OS family & min version
+    #   assert:
+    #     that: "ansible_os_family == '{{ os_family_supported }}'"
+    #     that: "ansible_distribution_version >= '{{ os_min_supported_version }}'"
+    #   tags:
+    #    - oscheck
+
+    - name: Install packages
+      yum: name={{ item }} state=installed
+      with_items:
+        - libselinux-python
+        - procps
+        - module-init-tools
+        - ethtool
+        - bc
+        - bind-utils
+        - nfs-utils
+        - xorg-x11-utils
+        - xorg-x11-xauth
+
+      tags: os_packages, oscheck
+
+    - name: Disable firewall
+      service: name=firewalld state=stopped enabled=no
+
+    # - name: Disable selinux (permanently)
+    #   selinux: state=disabled
+    #
+    # - name: Disable selinux (runtime)
+    #   shell: setenforce 0
+    #   ignore_errors: true
+
+    # - name: Check dns for host
+    #   command: nslookup {{ ansible_hostname }}
+    #   register: ns
+    #   ignore_errors: True
+    #   tags: etchosts
+
+    - name: Add host to /etc/hosts
+      lineinfile: dest=/etc/hosts regexp='.*{{ ansible_fqdn }}$' line="{{ ansible_default_ipv4.address }} {{ ansible_hostname }} {{ ansible_fqdn }}" state=present
+      #when: "'find {{ ansible_hostname }}: NXDOMAIN' in ns.stdout or 'find {{ ansible_hostname }}: SERVFAIL' in ns.stdout "
+      tags: etchosts

@@ -1,0 +1,11 @@
+- name: Register facts
+  oracle_facts: hostname={{ inventory_hostname }} user={{ user }} password={{ oracle_db.passwd }} service_name={{ oracle_db.name }}
+  environment: oracle_env
+  tags: facts
+
+- debug: var=facts
+  tags: facts
+
+- debug: msg="Database name is {{ database.NAME }}, role is {{ database.DATABASE_ROLE }}, version is {{ version }}, oracle_home is {{ userenv.ORACLE_HOME}}"
+  tags: facts
+
