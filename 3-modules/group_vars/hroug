@@ -1,4 +1,5 @@
 ---
+oracle_stage_directory: /u01/stage
 oracle_base: /u01/app/oracle
 oracle_home: "{{ oracle_base }}/product/{{ oracle_db.version }}/db"
 oracle_db:
@@ -61,7 +62,7 @@ application_user:
      - schema: appuser
        schema_password: appuser
        state: present
-       default_tablespace: newtbs
+       default_tablespace: appuser_data
        default_temp_tablespace: temp
        grants:
             - approle1

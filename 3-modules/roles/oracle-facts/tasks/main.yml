@@ -2,10 +2,14 @@
   oracle_facts: hostname={{ inventory_hostname }} user={{ user }} password={{ oracle_db.passwd }} service_name={{ oracle_db.name }}
   environment: oracle_env
   tags: facts
+  register: facts
 
-- debug: var=facts
+#- debug: var=facts
+#  tags: facts
+
+- debug: msg="Database name is {{ database.NAME }}, role is {{ database.DATABASE_ROLE }}, version is {{ version }}, oracle_home is {% for item in userenv %}{{ item.ORACLE_HOME }}{%endfor%}"
   tags: facts
 
-- debug: msg="Database name is {{ database.NAME }}, role is {{ database.DATABASE_ROLE }}, version is {{ version }}, oracle_home is {{ userenv.ORACLE_HOME}}"
+- name: Create config sheet
+  template: src=db-config.txt.j2 dest={{ oracle_stage_directory }}/{{ oracle_db.name }}-config.txt owner={{ oracle_user.name }}
   tags: facts
-

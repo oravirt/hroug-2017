@@ -6,7 +6,7 @@ DOCUMENTATION = '''
 module: oracle_services
 short_description: Manage services in an Oracle database
 description:
-    - Manage services in an Oracle database (using srvctl)
+    - Manage services in an Oracle database
 version_added: "2.1.0.0"
 options:
     name:

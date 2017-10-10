@@ -152,27 +152,27 @@ def quote_string(item):
     else:
         return value
 
-def create_pdb(cursor, module, msg, oracle_home, name, sourcedb, pdb_admin_username, pdb_admin_password, datafile_dest, save_state, unplug_dest, file_name_convert):
+def create_pdb(cursor, module, msg, oracle_home, name, sourcedb, pdb_admin_username,
+                pdb_admin_password, datafile_dest, save_state, unplug_dest, file_name_convert):
 
     run_sql = []
     opensql = 'alter pluggable database %s open instances=all' % (name)
     createsql = 'create pluggable database %s ' % (name)
 
+
     if unplug_dest is not None:
         createsql += ' using \'%s\' ' % (unplug_dest)
-        createsql += ' nocopy tempfile reuse'
+        createsql += ' tempfile reuse'
 
     if unplug_dest is None:
         createsql += ' admin user %s identified by %s ' % (pdb_admin_username, pdb_admin_password)
 
-    if datafile_dest != None: #and unplug_dest is None:
+    if datafile_dest != None:
         createsql += ' create_file_dest = \'%s\'' % (datafile_dest)
 
     if file_name_convert is not None:
         quoted = ",".join("'" + p + "'" for p in file_name_convert.split(","))
-        createsql += ' file_name_convert = (\'%s\') ' % (quoted)
-        msg[0] = 'sql is: %s, quoted is: %s, fnc is: %s'  % (createsql,quoted,file_name_convert)
-        module.exit_json(msg=msg[0], changed=False)
+        createsql += ' file_name_convert = (%s) copy' % (quoted)
 
     run_sql.append(createsql)
     run_sql.append(opensql)
