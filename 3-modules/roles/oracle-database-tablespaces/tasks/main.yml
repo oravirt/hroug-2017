@@ -12,6 +12,6 @@
              maxsize={{ item.maxsize }}
              content={{ item.content }}
              state={{ item.state }}
-  environment: oracle_env
+  environment: "{{oracle_env}}"
   with_items: "{{ tablespaces }}"
   tags: tablespace
