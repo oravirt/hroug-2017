@@ -9,5 +9,4 @@
         sn="{{ oracle_db.name }}"
         mode=sysdba
   environment: "{{oracle_env}}"
-  with_items: "{{pdb}}"
   tags: pdb

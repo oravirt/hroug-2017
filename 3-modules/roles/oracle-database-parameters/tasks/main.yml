@@ -1,4 +1,4 @@
-- name=Set parameters
+- name: Set parameters
   oracle_parameter:
          hostname={{ inventory_hostname }}
          service_name={{ item.sn }}
