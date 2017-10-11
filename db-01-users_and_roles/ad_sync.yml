@@ -3,6 +3,9 @@
 # create role department_hr;
 # create role department_it;
 
+# yum install python-ldap
+# NOT PIP!!!! pip install ldap does not work
+
 # Verification
 # SELECT u.username, u.password, u.account_status, u.default_tablespace, u.initial_rsrc_consumer_group, LISTAGG(p.granted_role,', ') WITHIN GROUP (ORDER BY p.granted_role) roles FROM dba_users u LEFT OUTER JOIN dba_role_privs p ON p.grantee = u.username WHERE u.profile = 'LDAP_USER' GROUP BY u.username, u.password, u.account_status, u.default_tablespace, u.initial_rsrc_consumer_group;
 
