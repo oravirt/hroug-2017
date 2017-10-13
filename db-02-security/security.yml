@@ -90,4 +90,17 @@
             value: "{{ audit_dest }}"
             scope: spfile
             
+        - name: Increase AWR retention time
+          local_action:
+            module: oracle_awr
+            ### Target Oracle database connection information
+            hostname: "{{ inventory_hostname }}"
+            port: 1521
+            service_name: orcl12c
+            user: "{{ oracleuser }}"
+            password: "{{ oraclepassword }}"
+            ###
+            snapshot_interval_min: 60
+            snapshot_retention_days: 60
+             
       environment: "{{ oracle_env }}"
