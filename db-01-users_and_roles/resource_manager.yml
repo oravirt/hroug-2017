@@ -5,6 +5,7 @@
 
 - hosts: localhost
   vars:
+    oraclehost: 192.168.56.105
     oracle_env:
 #      ORACLE_HOME: /usr/lib/oracle/12.1/client64
 #      LD_LIBRARY_PATH: /usr/lib/oracle/12.1/client64/lib
@@ -15,7 +16,7 @@
         - name: Manage consumer group for LDAP synced users
           oracle_rsrc_consgroup:
             ### Target Oracle database connection information
-            hostname: 192.168.56.101
+            hostname: "{{ oraclehost }}"
             port: 1521
             service_name: orcl
             user: system
