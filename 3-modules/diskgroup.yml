@@ -1,0 +1,7 @@
+
+- name: Manage diskgroup
+  hosts: all
+  become: yes
+  roles:
+     - host-storage
+     - oracle-asm-diskgroups

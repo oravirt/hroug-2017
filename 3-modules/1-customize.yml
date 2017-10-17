@@ -1,0 +1,12 @@
+- name: Customize database
+  hosts: all
+  become: yes
+  become_user: oracle
+  roles:
+      - oracle-database-pdb
+      - oracle-database-parameters
+      - oracle-database-tablespaces
+      - oracle-database-roles
+      - oracle-database-users
+      - oracle-database-services
+      - oracle-facts

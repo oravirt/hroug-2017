@@ -1,4 +1,4 @@
-- name: Create DBA user
+- name: Create DBA user (in pdb)
   oracle_user:
           hostname={{ inventory_hostname }}
           service_name={{ oracle_db.pdb }}
@@ -18,7 +18,7 @@
   tags: users
 
 
-- name: Create Application Users
+- name: Create Application Users (in pdb)
   oracle_user:
           hostname={{ inventory_hostname }}
           service_name={{ oracle_db.pdb }}

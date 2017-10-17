@@ -1,4 +1,4 @@
-- name: Create tablespace
+- name: Manage tablespace (in pdb)
   oracle_tablespace:
              hostname={{ inventory_hostname }}
              service_name={{ oracle_db.pdb }}

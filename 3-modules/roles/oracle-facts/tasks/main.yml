@@ -19,4 +19,5 @@
        src=db-config.txt.j2
        dest={{ oracle_stage_directory }}/{{ oracle_db.name }}-config.txt
        owner={{ oracle_user.name }}
+       backup=True
   tags: facts

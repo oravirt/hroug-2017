@@ -408,8 +408,7 @@ datafileJarLocation={ORACLE_HOME}/assistants/dbca/templates/
 # Default value : $ORACLE_BASE/oradata
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-datafileDestination={{ oracle_db.datafile_dest }}
-
+#datafileDestination=
 #-----------------------------------------------------------------------------
 # Name          : recoveryAreaDestination
 # Datatype      : String
@@ -418,7 +417,7 @@ datafileDestination={{ oracle_db.datafile_dest }}
 # Default value : $ORACLE_BASE/flash_recovery_area
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-recoveryAreaDestination={{ oracle_db.recoveryfile_dest }}
+#recoveryAreaDestination=
 
 #-----------------------------------------------------------------------------
 # Name          : storageType
@@ -428,7 +427,7 @@ recoveryAreaDestination={{ oracle_db.recoveryfile_dest }}
 # Default value : FS
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-storageType=FS
+storageType=ASM
 
 #-----------------------------------------------------------------------------
 # Name          : diskGroupName
@@ -443,7 +442,7 @@ storageType=FS
 # Default value : None
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-
+diskGroupName={{ oracle_db.datafile_dest }}
 #-----------------------------------------------------------------------------
 # Name          : recoveryGroupName
 # Datatype      : String
@@ -451,7 +450,7 @@ storageType=FS
 # Default value : RECOVERY
 # Mandatory     : No
 #-----------------------------------------------------------------------------
-
+recoveryGroupName={{ oracle_db.recoveryfile_dest }}
 #-----------------------------------------------------------------------------
 # Name          : characterSet
 # Datatype      : String
@@ -548,7 +547,7 @@ variablesFile=
 # Default value : None
 # Mandatory     : NO
 #-----------------------------------------------------------------------------
-#initParams = 
+#initParams =
 #-----------------------------------------------------------------------------
 # Name          : sampleSchema
 # Datatype      : Boolean
