@@ -8,10 +8,10 @@
   tags: facts
   register: facts
 
-#- debug: var=facts
-#  tags: facts
+- debug: var=facts
+  tags: facts
 
-- debug: msg="Database name is {{ database.NAME }}, role is {{ database.DATABASE_ROLE }}, version is {{ version }}, oracle_home is {% for item in userenv %}{{ item.ORACLE_HOME }}{%endfor%}"
+- debug: msg="Database name is {{ database.NAME |lower }}, role is {{ database.DATABASE_ROLE|lower }}, version is {{ version }}, oracle_home is {% for item in userenv %}{{ item.ORACLE_HOME }}{%endfor%}"
   tags: facts
 
 - name: Create config sheet

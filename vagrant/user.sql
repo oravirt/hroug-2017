@@ -61,4 +61,3 @@ set lines 80
 set verify on
 set feed on
 PROMPT
-miksan@

@@ -1,6 +1,7 @@
 - name: Create pdb
   oracle_pdb:
         name="{{ oracle_db.pdb }}"
+        dfd="{{ oracle_db.pdb_dg }}"
         sourcedb="{{ oracle_db.name }}"
         state=present
         host="{{ inventory_hostname }}"

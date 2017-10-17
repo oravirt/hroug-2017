@@ -75,6 +75,12 @@
   register: configtool
   when: giinstall.changed
 
+- name: Customize glogin.sql
+  lineinfile: dest="{{ oracle_home_gi }}/sqlplus/admin/glogin.sql" line='set sqlprompt "_user @ _connect_identifier:>"' backup=yes
+  become: yes
+  become_user: "{{ oracle_user.name }}"
+  tags: glogin
+
 
 - name: Copy cx_Oracle RPM
   copy: src=files/cx_Oracle-5.2.1-12c-py27-1.x86_64.rpm dest={{ oracle_stage_directory }}/

@@ -3,6 +3,7 @@ export ORACLE_HOME={{ oracle_home }}
 export LD_LIBRARY_PATH={{ oracle_home }}/lib
 export ORACLE_DBNAME={{ oracle_db.name }}
 export ORACLE_SID=`ps -ef | grep  "ora_pmon_$ORACLE_DBNAME" |grep -v grep | sed 's/^.*pmon_//g'`
+export SQLPATH=/vagrant
 
 alias sqlsys='rlwrap sqlplus / as sysdba'
 alias sqlp='rlwrap sqlplus'

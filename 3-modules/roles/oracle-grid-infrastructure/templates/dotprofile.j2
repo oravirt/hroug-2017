@@ -1,7 +1,7 @@
 export ORACLE_BASE={{ oracle_base }}
 export ORACLE_HOME={{ oracle_home_gi }}
 export LD_LIBRARY_PATH={{ oracle_home_gi }}/lib
-
+export SQLPATH=/vagrant
 export ORACLE_SID=`ps -ef | grep "_pmon_+ASM" |grep -v grep | sed 's/^.*pmon_//g'`
 
 

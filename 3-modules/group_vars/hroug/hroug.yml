@@ -4,6 +4,7 @@ oracle_base: /u01/app/oracle
 oracle_home: "{{ oracle_base }}/product/{{ oracle_db.version }}/db"
 oracle_home_gi: "{{ oracle_base }}/product/{{ oracle_gi.version }}/grid"
 install_packages: False
+user: system
 
 oracle_gi:
       version: 12.2.0.1
@@ -22,7 +23,8 @@ oracle_db:
       listener_name: LISTENER
       listener_protocols: TCP
       listener_port: 1521
-      pdb: mypdb1
+      pdb: apppdb1
+      pdb_dg: '+APPDG'
 
 oracle_groups:
      - oinstall
@@ -82,20 +84,18 @@ asm_diskgroups:
      - {device: /dev/sdi, asmlabel: fra01, asmdevice: 'ORCL:FRA01'}
      - {device: /dev/sdj, asmlabel: fra02, asmdevice: 'ORCL:FRA02'}
      - {device: /dev/sdk, asmlabel: fra03, asmdevice: 'ORCL:FRA03'}
- # - diskgroup: newdg
- #   state: present
- #   redundancy: external
- #   attributes:
- #     - {name: au_size, value: 4M}
- #     - {name: compatible.asm, value: 12.2.0.1.0}
- #     - {name: compatible.rdbms, value: 12.2.0.1.0}
- #   disk:
- #     - {device: /dev/sdl, asmlabel: newdg01, asmdevice: 'ORCL:NEWDG01'}
- #     - {device: /dev/sdm, asmlabel: newdg02, asmdevice: 'ORCL:NEWDG02'}
- #     - {device: /dev/sdn, asmlabel: newdg03, asmdevice: 'ORCL:NEWDG03'}
+ - diskgroup: APPDG
+   state: present
+   redundancy: external
+   attributes:
+     - {name: au_size, value: 4M}
+     - {name: compatible.asm, value: 12.2.0.1.0}
+     - {name: compatible.rdbms, value: 12.2.0.1.0}
+   disk:
+     - {device: /dev/sdl, asmlabel: appdg01, asmdevice: 'ORCL:APPDG01'}
+     - {device: /dev/sdm, asmlabel: appdg02, asmdevice: 'ORCL:APPDG02'}
+     - {device: /dev/sdn, asmlabel: appdg03, asmdevice: 'ORCL:APPDG03'}
 
-
-user: system
 
 services:
          - { name: "{{ oracle_db.pdb}}_service1", dbname: "{{ oracle_db.name }}", pdb: "{{ oracle_db.pdb }}", oracle_home: "{{ oracle_home }}", sn: "{{ oracle_db.pdb }}", state: present }
@@ -105,7 +105,8 @@ services:
 init_parameters:
          #- { name: db_recovery_file_dest, value: /u01/fra, state: present, scope: both, sn: "{{ oracle_db.name}}" }
          - { name: db_recovery_file_dest_size, value: 10G, state: present, scope: both, sn: "{{ oracle_db.name}}" }
-         - { name: db_create_file_dest, value: '+NEWDG', state: present, scope: both, sn: "{{ oracle_db.pdb }}" }
+         - { name: db_recovery_file_dest, value: '+FRA', state: present, scope: both, sn: "{{ oracle_db.name}}" }
+         - { name: db_create_file_dest, value: '+APPDG', state: present, scope: both, sn: "{{ oracle_db.pdb }}" }
 
 
 tablespaces:
@@ -124,7 +125,7 @@ dba_user:
 
 application_user:
      - schema: appuser
-       schema_password: appuser
+       schema_password: "{{ appuser_passwd}}" # appuser
        state: present
        default_tablespace: appuser_data
        default_temp_tablespace: temp
@@ -136,6 +137,7 @@ roles:
      - name: approle1
        role_grants:
             - create session
+            - create table
             - select any table
             - select any dictionary
        state: present
