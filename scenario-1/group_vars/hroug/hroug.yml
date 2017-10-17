@@ -23,7 +23,7 @@ oracle_db:
       listener_name: LISTENER
       listener_protocols: TCP
       listener_port: 1521
-      pdb: apppdb1
+      pdb: appdb1
       pdb_dg: '+APPDG'
 
 oracle_groups:
@@ -84,17 +84,17 @@ asm_diskgroups:
      - {device: /dev/sdi, asmlabel: fra01, asmdevice: 'ORCL:FRA01'}
      - {device: /dev/sdj, asmlabel: fra02, asmdevice: 'ORCL:FRA02'}
      - {device: /dev/sdk, asmlabel: fra03, asmdevice: 'ORCL:FRA03'}
- - diskgroup: APPDG
-   state: present
-   redundancy: external
-   attributes:
-     - {name: au_size, value: 4M}
-     - {name: compatible.asm, value: 12.2.0.1.0}
-     - {name: compatible.rdbms, value: 12.2.0.1.0}
-   disk:
-     - {device: /dev/sdl, asmlabel: appdg01, asmdevice: 'ORCL:APPDG01'}
-     - {device: /dev/sdm, asmlabel: appdg02, asmdevice: 'ORCL:APPDG02'}
-     - {device: /dev/sdn, asmlabel: appdg03, asmdevice: 'ORCL:APPDG03'}
+ # - diskgroup: APPDG
+ #   state: present
+ #   redundancy: external
+ #   attributes:
+ #     - {name: au_size, value: 4M}
+ #     - {name: compatible.asm, value: 12.2.0.1.0}
+ #     - {name: compatible.rdbms, value: 12.2.0.1.0}
+ #   disk:
+ #     - {device: /dev/sdl, asmlabel: appdg01, asmdevice: 'ORCL:APPDG01'}
+ #     - {device: /dev/sdm, asmlabel: appdg02, asmdevice: 'ORCL:APPDG02'}
+ #     - {device: /dev/sdn, asmlabel: appdg03, asmdevice: 'ORCL:APPDG03'}
 
 
 services:
