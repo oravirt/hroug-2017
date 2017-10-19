@@ -6,14 +6,14 @@
 
 - hosts: localhost
   vars:
-    oraclehost: 192.168.56.105
+    oraclehost: orcl
     oracle_env:
 #      ORACLE_HOME: /usr/lib/oracle/12.1/client64
 #      LD_LIBRARY_PATH: /usr/lib/oracle/12.1/client64/lib
       nothing_to_see_here: just a placeholder
   tasks:
     - block:
-        
+
         - name: Manage what objects DEPARTMENT_HR can access
           oracle_privs:
             ### Target Oracle database connection information
@@ -22,7 +22,7 @@
             service_name: orcl
             user: system
             password: oracle
-            ### 
+            ###
             roles:
               - DEPARTMENT_HR
             privs:
@@ -35,5 +35,5 @@
               - TABLE
               - VIEW
             state: present
-        
+
       environment: "{{ oracle_env }}"

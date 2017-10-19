@@ -11,7 +11,8 @@
 
 - hosts: localhost
   vars:
-    oraclehost: 192.168.56.105
+    oraclehost: orcl
+    adhost: ad
     oracle_env:
 #      ORACLE_HOME: /usr/lib/oracle/12.1/client64
 #      LD_LIBRARY_PATH: /usr/lib/oracle/12.1/client64/lib
@@ -26,7 +27,7 @@
         user: system
         password: oracle
         ### LDAP parameters
-        ldap_connect: ldap://192.168.56.103:389
+        ldap_connect: "ldap://{{ adhost }}:389"
         ldap_binddn: Administrator@ansible.test
         ldap_bindpassword: Ansible2017
         ldap_user_basedn: OU=Users,OU=Demo,DC=ansible,DC=test
