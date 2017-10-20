@@ -12,7 +12,7 @@ col granted_role format a30
 col admin_option format a10
 col default_role format a10
 --
-accept USER char prompt 'Enter username:'
+accept USER char prompt 'Enter username/role:'
 
 PROMPT
 PROMPT TABLE PRIVILEGES

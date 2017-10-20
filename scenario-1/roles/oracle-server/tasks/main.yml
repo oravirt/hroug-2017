@@ -56,7 +56,10 @@
   tags: dotprofile
 
 - name: oracle-server | Customize glogin.sql
-  lineinfile: dest="{{ oracle_home }}/sqlplus/admin/glogin.sql" line='set sqlprompt "_user @ _connect_identifier:>"' backup=yes
+  lineinfile:
+         dest="{{ oracle_home }}/sqlplus/admin/glogin.sql"
+         line='set sqlprompt "_user @ _connect_identifier:>"'
+         backup=yes
   become: yes
   become_user: "{{ oracle_user.name }}"
   tags: glogin

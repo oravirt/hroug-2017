@@ -8,9 +8,9 @@ oracle_home: {% for item in userenv %}{{ item.ORACLE_HOME }}{%endfor%}
 
 logmode: {{ database.LOG_MODE |lower}}
 
+These are the list of PDB's configured:
 {% for item in pdb %}
 {% if item.NAME and item.NAME != 'PDB$SEED'%}
-These are the list of PDB's configured:
   - Name: {{item.NAME | lower}}, container_id: {{ item.CON_ID}}
 {% endif %}
 {% endfor %}

@@ -16,11 +16,10 @@
         service_name={{ oracle_db.pdb }}
         user={{ user }}
         password={{ oracle_db.passwd }}
-        role={{ item.0.name }}
-        grants="{{ item.1 }}"
-        state={{ item.0.state }}
+        role={{ item.name }}
+        grants="{{ item.role_grants }}"
+        state=present
   environment: "{{oracle_env}}"
-  with_subelements:
+  with_items:
          - "{{ roles }}"
-         - role_grants
-  tags: grant
+  tags: role,grant

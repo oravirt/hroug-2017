@@ -31,10 +31,6 @@
   with_items: "{{ oracle_home_gi |basename }}"
   tags: dotprofile
 
-- name: Make sure profile is loaded
-  lineinfile: dest="/home/{{ grid_owner }}/.bash_profile" line='source /home/{{ grid_owner}}/.profile_grid' backup=yes
-  tags: dotprofile
-
 - name: Setup response file for install (GI)
   template: src=gi-install.rsp.j2 dest="{{ oracle_stage_directory }}/gi_{{ oracle_gi.version }}.rsp" owner="{{ oracle_user.name }}" group={{ oracle_user.primgroup }} mode=775 backup=yes
   with_items: "{{asm_diskgroups}}"

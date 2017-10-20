@@ -53,7 +53,7 @@ crs_diskgroup: crs
 asm_diskgroups:
  - diskgroup: crs
    state: present
-   redundancy: external
+   redundancy: normal
    attributes:
      - {name: au_size, value: 1m}
      - {name: compatible.asm, value: 12.2.0.1.0}
@@ -98,27 +98,26 @@ asm_diskgroups:
 
 
 services:
-         - { name: "{{ oracle_db.pdb}}_service1", dbname: "{{ oracle_db.name }}", pdb: "{{ oracle_db.pdb }}", oracle_home: "{{ oracle_home }}", sn: "{{ oracle_db.pdb }}", state: present }
-         - { name: appuser_service, dbname: "{{ oracle_db.name }}", pdb: "{{ oracle_db.pdb }}", oracle_home: "{{ oracle_home }}", sn: "{{ oracle_db.pdb }}", state: present }
+        - { name: appuser_service, dbname: "{{ oracle_db.name }}", pdb: "{{ oracle_db.pdb }}", oracle_home: "{{ oracle_home }}", sn: "{{ oracle_db.pdb }}", state: present }
+        - { name: dbauser_service, dbname: "{{ oracle_db.name }}", pdb: "{{ oracle_db.pdb }}", oracle_home: "{{ oracle_home }}", sn: "{{ oracle_db.pdb }}", state: present }
 
 
 init_parameters:
-         #- { name: db_recovery_file_dest, value: /u01/fra, state: present, scope: both, sn: "{{ oracle_db.name}}" }
-         - { name: db_recovery_file_dest_size, value: 10G, state: present, scope: both, sn: "{{ oracle_db.name}}" }
+         - { name: db_recovery_file_dest_size, value: 60G, state: present, scope: both, sn: "{{ oracle_db.name}}" }
          - { name: db_recovery_file_dest, value: '+FRA', state: present, scope: both, sn: "{{ oracle_db.name}}" }
          - { name: db_create_file_dest, value: '+APPDG', state: present, scope: both, sn: "{{ oracle_db.pdb }}" }
 
 
 tablespaces:
          - { name: appuser_data, size: 10M, bigfile: True, autoextend: false , next: 5M, maxsize: 500M, content: permanent, state: present }
-         - { name: users, size: 5M, bigfile: false, autoextend: false , next: 5M, maxsize: 500M, content: permanent, state: present }
+         - { name: dbauser_data, size: 5M, bigfile: false, autoextend: false , next: 5M, maxsize: 500M, content: permanent, state: present }
 
 
 dba_user:
      - schema: dbauser
-       schema_password_hash: B7C930D09B3AF263 # passwd = dbauser
+       schema_password_hash: "{{dbauser_pwhash}}" # passwd = dbauser
        state: present
-       default_tablespace: users
+       default_tablespace: dbauser_data
        default_temp_tablespace: temp
        grants:
             - dba

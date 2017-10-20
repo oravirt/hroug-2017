@@ -10,9 +10,9 @@ col mode_status format a7
 col state format a8
 SELECT substr(g.name,0,12) "DGNAME"
 ,substr(D.PATH,0,23)"PATH"
-,D.MOUNT_STATUS
+--,D.MOUNT_STATUS
 ,D.HEADER_STATUS
-,D.MODE_STATUS
+--,D.MODE_STATUS
 ,D.STATE
 ,d.total_mb
 , round((((d.total_mb-d.free_mb)/d.total_mb)*100),2)"% Used"
