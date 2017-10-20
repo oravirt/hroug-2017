@@ -2,7 +2,7 @@
 # alter system set db_create_file_dest='/u01/app/oracle/oradata' scope=both;
 # create pluggable database x1 admin user dbauser identified by dbaUser123;
 # alter pluggable database x1 open;
-# alter pluggable database x1 save state; 
+# alter pluggable database x1 save state;
 
 # Verification
 
@@ -11,7 +11,7 @@
     pdb_json_query: pdb[?OPEN_MODE=='READ WRITE'].NAME
     exclude_pdb:
       - PDB$SEED
-    oraclehost: 192.168.56.105
+    oraclehost: orcl
     oracle_env:
 #      ORACLE_HOME: /usr/lib/oracle/12.1/client64
 #      LD_LIBRARY_PATH: /usr/lib/oracle/12.1/client64/lib
@@ -45,7 +45,7 @@
           comments: Tuesday window for maintenance tasks
           state: enabled
         with_items: "{{ dbfacts.ansible_facts | json_query(pdb_json_query) | difference(exclude_pdb) }}"
-          
+
       - name: Create a small test job in all PDBs
         oracle_job:
           ### Target Oracle database connection information
@@ -62,5 +62,5 @@
           repeat_interval: FREQ=HOURLY
           logging_level: off
         with_items: "{{ dbfacts.ansible_facts | json_query(pdb_json_query) | difference(exclude_pdb) }}"
-            
+
       environment: "{{ oracle_env }}"
